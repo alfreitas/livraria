@@ -1,13 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:livraria/models/filtroModel.dart';
-import 'package:livraria/models/genero.dart';
+import 'package:livraria/paginas/bloc/home_bloc.dart';
 import 'package:livraria/paginas/paginaCadastro.dart';
 import 'package:livraria/util/Navegador.dart';
-import 'package:livraria/widgets/itemLista.dart';
-import 'package:livraria/widgets/listaComFiltro.dart';
-
-import 'models/livro.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,9 +11,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        primarySwatch: Colors.green,
       ),
       home: HomePage(),
       routes: <String, WidgetBuilder>{
@@ -28,22 +25,38 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  
   HomePage() {
-   // items = [];
+    // items = [];
   }
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
- 
+  var bloc = BlocHome();
+
+  @override
+  void initState() {
+    bloc.initOneSignal();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
           title: new Text("Primeiro App"),
+          actions: <Widget>[
+            Badge(
+              badgeColor: Colors.redAccent,
+              shape: BadgeShape.circle,
+              borderRadius:40,
+              toAnimate: false,
+              badgeContent: Text('3'),
+              child: Icon(Icons.notifications),
+              position: BadgePosition.topRight(),
+            )
+          ],
           elevation:
               defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
         ),
@@ -60,7 +73,7 @@ class _HomePageState extends State<HomePage> {
               title: new Text("Livros"),
               trailing: new Icon(Icons.book),
               onTap: () {
-                Navegador.irPara(context,new PaginaCadastro(),true);
+                Navegador.irPara(context, new PaginaCadastro(), true);
               },
             ),
             new Divider(),
@@ -75,6 +88,6 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         )),
-        body: new Text("Bem Vindo") );
+        body: new Text("Bem Vindo"));
   }
 }
